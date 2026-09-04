@@ -54,6 +54,30 @@ stack must keep working regardless of Arduino connectivity.
 - `reconnect_period_sec` (double, default 2.0)
 - `reset_settle_sec` (double, default 2.0)
 
+## Manual testing
+
+To bring up just the joystick and this node (without the rest of the robot stack --
+no controllers armed, no actuators powered), from a sourced workspace:
+
+```bash
+ros2 launch dpad_serial_bridge dpad_serial_bridge_test.launch.py
+```
+
+Then press D-pad directions and watch this node's log output, and/or the Nano's own
+serial echo of what it received:
+
+```bash
+python3 -c "
+import serial, time
+s = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
+time.sleep(2)
+while True:
+    line = s.readline()
+    if line:
+        print(line.decode(errors='replace'), end='')
+"
+```
+
 ## Requirements
 
 - ROS2 (Jazzy or later)
